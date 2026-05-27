@@ -1,0 +1,373 @@
+:root {
+  --bg: #000;
+  --ink: #ffffff;
+  --ink-dim: #8a8a8a;
+  --field-bg: #1a1a1a;
+  --field-border: rgba(255,255,255,0.06);
+  --display-font: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  min-height: 100%;
+  width: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--display-font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+input  { font: inherit; color: inherit; }
+
+.stage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(28px, 4vw, 80px);
+  position: relative;
+}
+
+/* Wordmark anchored to the top-left of the page */
+.wordmark {
+  position: absolute;
+  top: clamp(20px, 2.4vw, 32px);
+  left: clamp(20px, 2.6vw, 36px);
+  display: inline-block;
+  z-index: 5;
+  isolation: isolate;
+}
+.wordmark img {
+  display: block;
+  height: clamp(22px, 1.8vw, 30px);
+  width: auto;
+  /* Base dims during the sweep so the white sheen band pops against it */
+  animation: wm-dim 10s linear infinite;
+  will-change: filter;
+}
+
+/* The sheen layer — a moving bright band, masked to the logo silhouette so
+   it only paints inside the white pixels of the wordmark. The mask uses the
+   same image as the base, scaled with `contain` to fit. */
+.wm-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.95) 50%,
+    transparent 58%
+  );
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  -webkit-mask-image: url("assets/logo-white.png");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url("assets/logo-white.png");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  animation: wm-shine 10s linear infinite;
+  will-change: background-position;
+}
+
+/* Hot spot starts off-right (pos 0%), sweeps across in the first ~1.2s,
+   then parks off-left for the remaining ~8.8s before the cycle restarts. */
+@keyframes wm-shine {
+  0%   { background-position-x: 0%; }
+  12%  { background-position-x: 100%; }
+  100% { background-position-x: 100%; }
+}
+/* Dim the base img during the sweep window so the highlight reads as a
+   reflective glint rather than a same-tone overlay. */
+@keyframes wm-dim {
+  0%   { filter: brightness(1); }
+  1%   { filter: brightness(0.68); }
+  11%  { filter: brightness(0.68); }
+  13%  { filter: brightness(1); }
+  100% { filter: brightness(1); }
+}
+
+/* ───────────────── LAYOUT ───────────────── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(40px, 8vw, 140px);
+  width: 100%;
+  max-width: 1480px;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.6vw, 36px);
+  max-width: 640px;
+}
+
+/* ───────────────── COPY ───────────────── */
+.tagline {
+  font-family: var(--display-font);
+  font-weight: 600;
+  font-size: clamp(40px, 5.6vw, 86px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* The trailing period — slowly rotates clockwise. transform-origin nudged
+   downward because the glyph sits near the baseline, not the box center. */
+.spin-dot {
+  display: inline-block;
+  transform-origin: 50% 78%;
+  animation: spin-dot 9s linear infinite;
+}
+@keyframes spin-dot {
+  to { transform: rotate(360deg); }
+}
+.subtitle {
+  font-family: var(--display-font);
+  font-weight: 400;
+  font-size: clamp(18px, 1.4vw, 22px);
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--ink-dim);
+  max-width: 38ch;
+  text-wrap: pretty;
+}
+
+/* ───────────────── CONTACT ROW ───────────────── */
+.contact-row {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  margin-top: clamp(8px, 1.4vw, 18px);
+  flex-wrap: wrap;
+}
+
+/* ───────────────── CTA — base + variants ───────────────── */
+.cta {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--display-font);
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  text-decoration: none;
+  height: 56px;
+  padding: 0 26px;
+  border-radius: 8px;
+  color: var(--ink);
+  transition: transform .25s ease, box-shadow .35s ease, background .25s ease;
+  white-space: nowrap;
+}
+.cta .arrow { transition: transform .25s ease; }
+.cta:hover .arrow { transform: translateX(4px); }
+
+/* LIQUID GLASS surface — refractive layered card. Applied to anything
+   that needs the same translucent material (CTAs, social buttons, etc).
+   The element must contain four absolutely-positioned span layers:
+     .glass-distort, .glass-tint, .glass-spec, .glass-edge
+   and an optional .glass-content span for the foreground. */
+.glass-card {
+  background: transparent;
+  overflow: hidden;
+  box-shadow:
+    0 18px 48px rgba(0,0,0,0.28),
+    0 2px 10px rgba(0,0,0,0.18);
+}
+.glass-card > span {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.glass-card .glass-distort {
+  -webkit-backdrop-filter: blur(8px) saturate(160%) brightness(1.08);
+  backdrop-filter: blur(8px) saturate(160%) brightness(1.08) url(#liquid-glass-distort);
+  z-index: 0;
+}
+.glass-card .glass-tint {
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.22) 0%,
+    rgba(255,255,255,0.10) 50%,
+    rgba(255,255,255,0.18) 100%);
+  z-index: 1;
+}
+.glass-card .glass-spec {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 38%),
+    linear-gradient(0deg,   rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 35%),
+    radial-gradient(120% 80% at 15% -10%, rgba(255,255,255,0.45), rgba(255,255,255,0) 55%);
+  mix-blend-mode: screen;
+  opacity: 0.95;
+  z-index: 2;
+  transition: transform .6s ease, opacity .4s ease;
+}
+.glass-card .glass-edge {
+  box-shadow:
+    0 0 0 1.5px rgba(255,255,255,0.55) inset,
+    0 1px 0 rgba(255,255,255,0.90) inset,
+    0 -1px 0 rgba(255,255,255,0.40) inset,
+    1px 0 0 rgba(255,255,255,0.30) inset,
+    -1px 0 0 rgba(255,255,255,0.30) inset;
+  z-index: 3;
+}
+.glass-card .glass-content {
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.glass-card:hover {
+  box-shadow:
+    0 22px 60px rgba(0,0,0,0.36),
+    0 2px 10px rgba(0,0,0,0.22);
+}
+.glass-card:hover .glass-spec { transform: translate(4px, -2px); opacity: 1; }
+
+/* CTA-specific: chromatic fringe on the label text */
+.cta.glass-card .glass-content {
+  text-shadow:
+    -0.4px 0 0 rgba(140, 200, 255, 0.40),
+     0.4px 0 0 rgba(255, 160, 190, 0.30),
+     0 2px 14px rgba(0,0,0,0.45);
+}
+
+.cta-solid {
+  background: var(--ink);
+  color: #000;
+}
+.cta-solid:hover { background: #f0f0f0; }
+
+.cta-underline {
+  background: transparent;
+  color: var(--ink);
+  padding: 0 0;
+  height: auto;
+  border-radius: 0;
+  border-bottom: 1px solid var(--ink);
+}
+
+/* ───────────────── SOCIAL BUTTONS ───────────────── */
+.socials {
+  position: absolute;
+  bottom: clamp(20px, 2.4vw, 32px);
+  left: clamp(20px, 2.6vw, 36px);
+  display: flex;
+  gap: 10px;
+  z-index: 5;
+}
+.social {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: #fff;
+  transition: transform .2s ease, box-shadow .35s ease;
+}
+.social:hover {
+  transform: translateY(-2px);
+}
+.social .glass-content {
+  width: 100%;
+  height: 100%;
+}
+.social .glass-content svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+}
+
+/* ───────────────── GLYPH ───────────────── */
+.glyph-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  /* Perspective lives on the column so the 3D rotation reads as depth */
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+}
+.glyph-wrap {
+  width: 100%;
+  max-width: 620px;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  transform-style: preserve-3d;
+}
+/* The 3D-rotated element. Drives the mouse-tilt via CSS vars set by the hook. */
+.glyph-3d {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  will-change: transform;
+}
+.glyph-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.glyph-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* The clip-path is the actual Res Labs glyph shape. Defined in app.jsx as
+     an SVG <clipPath clipPathUnits="objectBoundingBox"> so coords are 0-1. */
+  clip-path: url(#reslabs-glyph);
+  -webkit-clip-path: url(#reslabs-glyph);
+}
+/* Mouse-tracked sheen — floats just above the video plane. Uses the glyph
+   shape too so it doesn't bleed into the surrounding black canvas. */
+.glyph-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    40% 50% at var(--spec-x, 50%) var(--spec-y, 50%),
+    rgba(255,255,255,0.30) 0%,
+    rgba(255,255,255,0.08) 35%,
+    rgba(255,255,255,0) 65%
+  );
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  clip-path: url(#reslabs-glyph);
+  -webkit-clip-path: url(#reslabs-glyph);
+  transform: translateZ(10px);
+}
+
+/* ───────────────── RESPONSIVE ───────────────── */
+@media (max-width: 900px) {
+  .stage { padding: clamp(24px, 6vw, 48px) clamp(20px, 5vw, 32px); }
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 8vw, 64px);
+  }
+  .glyph-col { order: -1; }
+  .glyph-wrap { max-width: 360px; margin: 0 auto; }
+  .tagline   { font-size: clamp(38px, 9vw, 64px); }
+  .contact-row { flex-direction: column; align-items: stretch; }
+  .cta { justify-content: center; }
+}

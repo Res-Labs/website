@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Res Labs. We give physical objects state.</title>
+<meta name="description" content="Res Labs gives physical objects state." />
+
+<!-- Social previews. Crawlers read these from the HTML directly — they do
+     not execute JS, so this is what shows up on X / LinkedIn / iMessage. -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Res Labs. We give physical objects state." />
+<meta property="og:description" content="Res Labs gives physical objects state." />
+<meta property="og:image" content="https://reslabs.ai/assets/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Res Labs. We give physical objects state." />
+<meta name="twitter:description" content="Res Labs gives physical objects state." />
+<meta name="twitter:image" content="https://reslabs.ai/assets/og-image.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<!-- SVG displacement filter for the liquid-glass CTA. Lives at root so it can
+     be referenced by backdrop-filter via url(#liquid-glass-distort). -->
+<svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
+  <defs>
+    <filter id="liquid-glass-distort" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" result="noise" />
+      <feGaussianBlur in="noise" stdDeviation="2" result="softNoise" />
+      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="60" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<div id="root"></div>
+
+<!-- Crawler-readable content. Hidden visually but parsed by search engines
+     and link-preview bots that don't execute JS. -->
+<noscript>
+  <h1>Res Labs</h1>
+  <p>We give physical objects state.</p>
+  <p><a href="https://tally.so/r/2EDpd9">Work with us</a></p>
+</noscript>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
