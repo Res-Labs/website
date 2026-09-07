@@ -8,16 +8,18 @@ The site has no package manifest and no build step. `index.html` loads versioned
 
 The latest Vercel preview was deployed on 2026-09-07 and reached `READY`: `https://website-32b2o38sp-hughflood-5808s-projects.vercel.app/`.
 Vercel Authentication is disabled for the project, making the preview publicly accessible. An unauthenticated request returned HTTP 200, and browser inspection confirmed the expected page metadata, heading, structured data, poster, and optimized video.
-Production was not deployed with these changes.
+Production is connected to Vercel's Git integration, so a push to `main` can trigger a production deployment. The current production rollout must be verified after each source push.
 The deployment used the gate-loaded project-scoped credentials. No secret value entered this repository or README.
 
-## Keep the visible page unchanged
+## Keep approved design and copy stable
 
-SEO work must not change the rendered page or its runtime behavior. Keep the title `Res Labs. We give physical objects state.` and the description `Res Labs gives physical objects state.` unchanged.
+SEO work must keep the approved visual design stable unless the user explicitly approves a content or accessibility change. Keep metadata changes in the document head and dedicated crawl files.
 
-Do not change the hero copy, layout, animations, links, fonts, CDN scripts, or crawler-readable fallback. Do not add visible body content. Keep metadata changes in the document head and in the dedicated crawl files.
+The current approved title is `Res Labs | Verified context for physical products`, and the current description is `Res Labs gives physical products a verified digital context, so objects can carry information and identity beyond the shelf. Learn more and work with us.`
 
-Do not edit `styles.css`, `app.jsx`, `tweaks-panel.jsx`, or existing image and video assets for metadata work.
+For metadata-only work, do not change the hero copy, layout, animations, links, fonts, CDN scripts, or video assets.
+
+Do not edit `styles.css`, `app.jsx`, `tweaks-panel.jsx`, or existing image and video assets for metadata-only work.
 
 ## Source map
 

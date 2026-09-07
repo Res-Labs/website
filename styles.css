@@ -31,6 +31,36 @@ input  { font: inherit; color: inherit; }
   padding: clamp(28px, 4vw, 80px);
   position: relative;
 }
+.seo-fallback {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(28px, 4vw, 80px);
+  background: var(--bg);
+  color: var(--ink);
+}
+.seo-fallback h1 {
+  max-width: 14ch;
+  font-family: var(--display-font);
+  font-weight: 600;
+  font-size: clamp(40px, 5.6vw, 86px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+.seo-fallback p {
+  max-width: 38ch;
+  margin-top: clamp(20px, 2.6vw, 36px);
+  color: var(--ink-dim);
+  font-size: clamp(18px, 1.4vw, 22px);
+  line-height: 1.4;
+}
+.seo-fallback a {
+  display: inline-flex;
+  margin-top: clamp(20px, 2.6vw, 36px);
+  color: var(--ink);
+  font-weight: 500;
+}
 
 /* Wordmark anchored to the top-left of the page */
 .wordmark {
@@ -358,6 +388,14 @@ input  { font: inherit; color: inherit; }
   transform: translateZ(10px);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .wordmark img,
+  .wm-shine,
+  .spin-dot,
+  .glyph-shine {
+    animation: none;
+  }
+}
 /* ───────────────── RESPONSIVE ───────────────── */
 @media (max-width: 900px) {
   .stage { padding: clamp(24px, 6vw, 48px) clamp(20px, 5vw, 32px); }

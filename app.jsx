@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 const DEFAULTS = /*EDITMODE-BEGIN*/{
   "displayFont": "geist",
   "ctaStyle": "glass",
-  "tagline": "We give physical objects state.",
+  "tagline": "Verified context for physical products.",
   "ctaLabel": "Work with us",
   "ctaHref": "https://tally.so/r/2EDpd9",
   "tiltGlyph": true
@@ -86,14 +86,29 @@ function useMouseTilt(ref, { maxTilt = 18, enabled = true } = {}) {
   }, [ref, enabled, maxTilt]);
 }
 
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return reduced;
+}
+
 function Site() {
   const [t, setTweak] = useTweaks(DEFAULTS);
+  const prefersReducedMotion = useReducedMotion();
   const displayFont = FONT_STACKS[t.displayFont] || FONT_STACKS.geist;
 
   return (
     <div className="stage" style={{ "--display-font": displayFont }}>
       {/* Wordmark — anchored top-left of the viewport */}
-      <a className="wordmark" href="#" aria-label="Res Labs">
+      <a className="wordmark" href="/" aria-label="Res Labs">
         <img src="assets/logo-white.png" alt="Res Labs" width="326" height="58" />
         <span className="wm-shine" aria-hidden="true" />
       </a>
@@ -115,6 +130,7 @@ function Site() {
               );
             })()}
           </h1>
+          <p className="subtitle">Res Labs gives physical products a verified digital context, so objects can carry information and identity beyond the shelf.</p>
 
           <div className="contact-row">
             <CTA variant={t.ctaStyle} href={t.ctaHref}>{t.ctaLabel}</CTA>
@@ -123,7 +139,7 @@ function Site() {
 
         {/* RIGHT — glyph filled with the video */}
         <section className="glyph-col">
-          <GlyphMark tilt={t.tiltGlyph} />
+          <GlyphMark tilt={t.tiltGlyph} reduceMotion={prefersReducedMotion} />
         </section>
       </main>
 
@@ -172,9 +188,9 @@ function Site() {
 // GlyphMark — the Res Labs glyph rendered as an SVG clip-path that punches a
 // hole through a single <video>. Faithful conversion of the official SVG to
 // objectBoundingBox coordinates.
-function GlyphMark({ tilt }) {
+function GlyphMark({ tilt, reduceMotion }) {
   const ref = useRef(null);
-  useMouseTilt(ref, { maxTilt: 18, enabled: !!tilt });
+  useMouseTilt(ref, { maxTilt: 18, enabled: !!tilt && !reduceMotion });
 
   return (
     <div className="glyph-wrap" ref={ref}>
@@ -223,13 +239,13 @@ function GlyphMark({ tilt }) {
           height="540"
           preload="metadata"
           aria-hidden="true"
-          autoPlay
+          autoPlay={!reduceMotion}
           muted
           loop
           playsInline
         />
         {/* Subtle specular sheen that follows the mouse when tilt is on */}
-        {tilt && <div className="glyph-shine" aria-hidden="true" />}
+        {tilt && !reduceMotion && <div className="glyph-shine" aria-hidden="true" />}
       </div>
     </div>
   );
@@ -306,11 +322,6 @@ function SocialButton({ href, label, children }) {
 function Socials() {
   return (
     <div className="socials" aria-label="Social links">
-      <SocialButton href="#" label="LinkedIn">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43c-1.14 0-2.06-.92-2.06-2.06s.92-2.06 2.06-2.06c1.14 0 2.06.92 2.06 2.06s-.92 2.06-2.06 2.06zM7.12 20.45H3.56V9h3.56v11.45z" />
-        </svg>
-      </SocialButton>
       <SocialButton href="https://x.com/reslabs_ai" label="X (@reslabs_ai)">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />

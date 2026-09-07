@@ -13,6 +13,7 @@ Production deployment requires both of these conditions:
 2. The user has explicitly approved the production deployment.
 
 Do not deploy production while either condition is missing. This skill does not create tokens, change DNS, or deploy the separate ObjectOS Research Chemical environment.
+This repository is connected to Vercel's Git integration. A push to `main` can trigger a production deployment even when this helper is not run. Treat every source push to `main` as a production side effect and require explicit user approval before pushing release changes.
 
 ## Load the credentials
 
