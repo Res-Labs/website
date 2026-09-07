@@ -346,4 +346,23 @@ function Socials() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<Site />);
-requestAnimationFrame(() => document.getElementById("app-loading")?.remove());
+const loading = document.getElementById("app-loading");
+let loadingTimeout;
+const releaseLoading = () => {
+  window.clearTimeout(loadingTimeout);
+  loading?.remove();
+};
+const waitForHero = () => {
+  const video = document.querySelector(".glyph-video");
+  if (!video) {
+    requestAnimationFrame(waitForHero);
+    return;
+  }
+  if (video.readyState >= 2) {
+    releaseLoading();
+    return;
+  }
+  video.addEventListener("loadeddata", releaseLoading, { once: true });
+  loadingTimeout = window.setTimeout(releaseLoading, 1800);
+};
+requestAnimationFrame(waitForHero);
