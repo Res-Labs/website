@@ -6,9 +6,10 @@ This directory contains the static Res Labs marketing landing page. `reslabs.ai`
 
 The site has no package manifest and no build step. `index.html` loads versioned React, ReactDOM, and Babel CDN scripts, then runs `app.jsx` and `tweaks-panel.jsx` in the browser. `vercel.json` sets immutable caching for `/assets/*`.
 
-No Vercel deployment was made. On 2026-09-06, Vercel authentication returned "User not found" for the gate-loaded landing-page token.
-The gate exposed only key and status names. No secret value entered this repository or README.
-Update the token through the approved gate, then create and inspect a preview before production.
+A Vercel preview was deployed on 2026-09-07 and reached `READY`: `https://website-lu2k9arsd-hughflood-5808s-projects.vercel.app/`.
+The preview redirects unauthenticated visitors to Vercel Login. Production was not deployed.
+The deployment used the gate-loaded project-scoped credentials. No secret value entered this repository or README.
+Inspect the preview before production.
 
 ## Keep the visible page unchanged
 
