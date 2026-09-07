@@ -87,7 +87,9 @@ function useMouseTilt(ref, { maxTilt = 18, enabled = true } = {}) {
 }
 
 function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(() =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -190,8 +192,18 @@ function Site() {
 // objectBoundingBox coordinates.
 function GlyphMark({ tilt, reduceMotion }) {
   const ref = useRef(null);
+  const videoRef = useRef(null);
   useMouseTilt(ref, { maxTilt: 18, enabled: !!tilt && !reduceMotion });
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (reduceMotion) {
+      video.pause();
+      return;
+    }
+    void video.play().catch(() => {});
+  }, [reduceMotion]);
   return (
     <div className="glyph-wrap" ref={ref}>
       {/* SVG defs — lives in the same DOM as the clipped element. */}
@@ -232,6 +244,7 @@ function GlyphMark({ tilt, reduceMotion }) {
 
       <div className="glyph-3d">
         <video
+          ref={videoRef}
           className="glyph-video"
           src="assets/hero.mp4?v=2"
           poster="assets/hero-poster.jpg?v=1"
