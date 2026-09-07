@@ -23,7 +23,9 @@ const files = [
   "robots.txt",
   "sitemap.xml",
   "favicon.svg",
+  "assets/hero-poster.jpg",
   "assets/hero.mp4",
+  "assets/logo-schema.svg",
   "assets/logo-white.png",
   "assets/logo.png",
   "assets/logo.svg",
@@ -38,6 +40,7 @@ const mimeTypes = {
   ".xml": "application/xml",
   ".svg": "image/svg+xml",
   ".png": "image/png",
+  ".jpg": "image/jpeg",
   ".mp4": "video/mp4",
 };
 const authHeaders = { Authorization: `Bearer ${token}` };

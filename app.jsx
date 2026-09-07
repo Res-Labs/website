@@ -94,7 +94,7 @@ function Site() {
     <div className="stage" style={{ "--display-font": displayFont }}>
       {/* Wordmark — anchored top-left of the viewport */}
       <a className="wordmark" href="#" aria-label="Res Labs">
-        <img src="assets/logo-white.png" alt="Res Labs" />
+        <img src="assets/logo-white.png" alt="Res Labs" width="326" height="58" />
         <span className="wm-shine" aria-hidden="true" />
       </a>
 
@@ -217,7 +217,12 @@ function GlyphMark({ tilt }) {
       <div className="glyph-3d">
         <video
           className="glyph-video"
-          src="assets/hero.mp4"
+          src="assets/hero.mp4?v=2"
+          poster="assets/hero-poster.jpg?v=1"
+          width="960"
+          height="540"
+          preload="metadata"
+          aria-hidden="true"
           autoPlay
           muted
           loop

@@ -6,9 +6,9 @@ This directory contains the static Res Labs marketing landing page. `reslabs.ai`
 
 The site has no package manifest and no build step. `index.html` loads versioned React, ReactDOM, and Babel CDN scripts, then runs `app.jsx` and `tweaks-panel.jsx` in the browser. `vercel.json` sets immutable caching for `/assets/*`.
 
-A Vercel preview was deployed on 2026-09-07 and reached `READY`: `https://website-lu2k9arsd-hughflood-5808s-projects.vercel.app/`.
-Vercel Authentication was disabled for the project on 2026-09-07, making the preview publicly accessible. An unauthenticated request returned HTTP 200, and browser inspection confirmed the expected title, heading, and description.
-Production was not deployed.
+The latest Vercel preview was deployed on 2026-09-07 and reached `READY`: `https://website-32b2o38sp-hughflood-5808s-projects.vercel.app/`.
+Vercel Authentication is disabled for the project, making the preview publicly accessible. An unauthenticated request returned HTTP 200, and browser inspection confirmed the expected page metadata, heading, structured data, poster, and optimized video.
+Production was not deployed with these changes.
 The deployment used the gate-loaded project-scoped credentials. No secret value entered this repository or README.
 
 ## Keep the visible page unchanged
@@ -33,6 +33,8 @@ Do not edit `styles.css`, `app.jsx`, `tweaks-panel.jsx`, or existing image and v
 - `assets/hero.mp4` is the glyph video used by the landing page.
 - `vercel.json` owns the immutable cache header for `/assets/*`. It does not own SEO metadata.
 - `.agents/skills/deploy-prod/SKILL.md` owns the project-scoped Vercel production deployment workflow and credential-loading procedure.
+- `assets/hero-poster.jpg` is the first frame of the hero video, used as its loading poster.
+- `assets/logo-schema.svg` is the square logo used by Organization JSON-LD.
 
 ## Use the verified brand context
 
