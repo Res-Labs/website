@@ -48,6 +48,35 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
+<style>
+  #app-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    place-items: center;
+    background: #000;
+  }
+  html.js-enabled #app-loading {
+    display: grid;
+  }
+  #app-loading::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: app-loading-spin 0.8s linear infinite;
+  }
+  @keyframes app-loading-spin {
+    to { transform: rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #app-loading::before { animation: none; }
+  }
+</style>
+<script>document.documentElement.classList.add("js-enabled");</script>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -70,6 +99,7 @@
     <p><a href="https://tally.so/r/2EDpd9">Work with us</a></p>
   </main>
 </div>
+<div id="app-loading" role="status" aria-label="Loading Res Labs"></div>
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
