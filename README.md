@@ -6,9 +6,9 @@ This directory contains the static Res Labs marketing landing page. `reslabs.ai`
 
 The site has no package manifest and no build step. `index.html` loads versioned React, ReactDOM, and Babel CDN scripts, then runs `app.jsx` and `tweaks-panel.jsx` in the browser. `vercel.json` sets immutable caching for `/assets/*`.
 
-The latest Vercel preview was deployed on 2026-09-07 and reached `READY`: `https://website-32b2o38sp-hughflood-5808s-projects.vercel.app/`.
-Vercel Authentication is disabled for the project, making the preview publicly accessible. An unauthenticated request returned HTTP 200, and browser inspection confirmed the expected page metadata, heading, structured data, poster, and optimized video.
-Production is connected to Vercel's Git integration, so a push to `main` can trigger a production deployment. The current production rollout must be verified after each source push.
+The latest Vercel preview was deployed on 2026-09-07 and reached `READY`: `https://website-bf8h4wqgd-hughflood-5808s-projects.vercel.app/`.
+Vercel Authentication is disabled for the project, making the preview publicly accessible. An unauthenticated request returned HTTP 200, and browser inspection confirmed the expected metadata, content, structured data, poster, and optimized video.
+Production is connected to Vercel's Git integration, so a push to `main` can trigger a production deployment. The current rollout at `https://reslabs.ai/` was verified after the latest content and SEO push.
 The deployment used the gate-loaded project-scoped credentials. No secret value entered this repository or README.
 
 ## Keep approved design and copy stable
