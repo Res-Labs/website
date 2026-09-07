@@ -350,7 +350,11 @@ const loading = document.getElementById("app-loading");
 let loadingTimeout;
 const releaseLoading = () => {
   window.clearTimeout(loadingTimeout);
-  loading?.remove();
+  if (window.__releaseAppLoading) {
+    window.__releaseAppLoading();
+  } else {
+    loading?.remove();
+  }
 };
 const waitForHero = () => {
   const video = document.querySelector(".glyph-video");
