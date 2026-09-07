@@ -32,6 +32,7 @@ Do not edit `styles.css`, `app.jsx`, `tweaks-panel.jsx`, or existing image and v
 - `assets/logo.svg`, `assets/logo.png`, and `assets/logo-white.png` are Res Labs logo assets.
 - `assets/hero.mp4` is the glyph video used by the landing page.
 - `vercel.json` owns the immutable cache header for `/assets/*`. It does not own SEO metadata.
+- `.agents/skills/deploy-prod/SKILL.md` owns the project-scoped Vercel production deployment workflow and credential-loading procedure.
 
 ## Use the verified brand context
 
@@ -74,13 +75,15 @@ GATE=/Users/joon/.agents/skills/secrets/scripts/secret_output_gate.sh
 (
   source "$GATE" && \
     secret_output_gate -p ObjectOS load VERCEL_LANDING_PAGE_TOKEN VERCEL_LANDING_PAGE_PROJECT_ID && \
-    vercel link --yes --project "$VERCEL_LANDING_PAGE_PROJECT_ID" --token="$VERCEL_LANDING_PAGE_TOKEN" && \
-    vercel deploy --yes --token="$VERCEL_LANDING_PAGE_TOKEN"
+    curl -fsS -o /dev/null \
+      -w 'project_status=%{http_code}\n' \
+      "https://api.vercel.com/v9/projects/$VERCEL_LANDING_PAGE_PROJECT_ID" \
+      -H "Authorization: Bearer $VERCEL_LANDING_PAGE_TOKEN" && \
+    node .agents/skills/deploy-prod/scripts/deploy-vercel-static.mjs preview
 )
 ```
 
-The link command writes local project metadata under `.vercel/`. Do not commit it.
-Use the deployment URL printed by Vercel for inspection. Do not add `--prod` to a preview command. Do not use ObjectOS application deploy scripts for this site.
+The helper prints the deployment URL and waits for `READY`. Use that URL for inspection. Do not use ObjectOS application deploy scripts for this site.
 
 ## Deploy to production
 
@@ -91,12 +94,16 @@ GATE=/Users/joon/.agents/skills/secrets/scripts/secret_output_gate.sh
 (
   source "$GATE" && \
     secret_output_gate -p ObjectOS load VERCEL_LANDING_PAGE_TOKEN VERCEL_LANDING_PAGE_PROJECT_ID && \
-    vercel link --yes --project "$VERCEL_LANDING_PAGE_PROJECT_ID" --token="$VERCEL_LANDING_PAGE_TOKEN" && \
-    vercel deploy --prod --yes --token="$VERCEL_LANDING_PAGE_TOKEN"
+    curl -fsS -o /dev/null \
+      -w 'project_status=%{http_code}\n' \
+      "https://api.vercel.com/v9/projects/$VERCEL_LANDING_PAGE_PROJECT_ID" \
+      -H "Authorization: Bearer $VERCEL_LANDING_PAGE_TOKEN" && \
+    node .agents/skills/deploy-prod/scripts/deploy-vercel-static.mjs
 )
 ```
 
-This command links the project selected by `VERCEL_LANDING_PAGE_PROJECT_ID` and promotes the deployment to the production domain. Never paste token or project ID values into a command, file, issue, or log. Do not use secret-bearing legacy scripts.
+The helper deploys the project selected by `VERCEL_LANDING_PAGE_PROJECT_ID` to the production target. Never paste token or project ID values into a command, file, issue, or log. Do not use secret-bearing legacy scripts.
+
 
 
 ## Verify the change
